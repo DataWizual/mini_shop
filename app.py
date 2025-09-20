@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -7,20 +7,31 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# Модель товара
+# ===== Модель товара =====
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     price = db.Column(db.Float, nullable=False)
 
-# Создание БД
 with app.app_context():
     db.create_all()
 
+# ===== Веб-страницы =====
 @app.route('/')
-def home():
-    return "🛒 Welcome to Mini Shop Backend!"
+def index():
+    products = Product.query.all()
+    return render_template("index.html", products=products)
 
+@app.route('/add', methods=['POST'])
+def add():
+    name = request.form['name']
+    price = float(request.form['price'])
+    new_product = Product(name=name, price=price)
+    db.session.add(new_product)
+    db.session.commit()
+    return redirect(url_for('index'))
+
+# ===== API =====
 @app.route('/products', methods=['GET'])
 def get_products():
     products = Product.query.all()
