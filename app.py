@@ -1,5 +1,8 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -12,10 +15,11 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     price = db.Column(db.Float, nullable=False)
+    description = db.Column(db.String(200), nullable=True)  # новое поле
 
 with app.app_context():
     db.create_all()
-
+migrate = Migrate(app, db)
 # ===== Веб-страницы =====
 @app.route('/')
 def index():
@@ -26,7 +30,8 @@ def index():
 def add():
     name = request.form['name']
     price = float(request.form['price'])
-    new_product = Product(name=name, price=price)
+    description = request.form.get('description', '')  # новое поле
+    new_product = Product(name=name, price=price, description=description)
     db.session.add(new_product)
     db.session.commit()
     return redirect(url_for('index'))
@@ -35,19 +40,27 @@ def add():
 @app.route('/products', methods=['GET'])
 def get_products():
     products = Product.query.all()
-    return jsonify([{"id": p.id, "name": p.name, "price": p.price} for p in products])
+    return jsonify([
+        {"id": p.id, "name": p.name, "price": p.price, "description": p.description}
+        for p in products
+    ])
 
 @app.route('/products/<int:product_id>', methods=['GET'])
 def get_product(product_id):
     product = Product.query.get(product_id)
     if product:
-        return jsonify({"id": product.id, "name": product.name, "price": product.price})
+        return jsonify({"id": product.id, "name": product.name,
+                        "price": product.price, "description": product.description})
     return jsonify({"error": "Product not found"}), 404
 
 @app.route('/add_product', methods=['POST'])
 def add_product():
     data = request.get_json()
-    new_product = Product(name=data['name'], price=data['price'])
+    new_product = Product(
+        name=data['name'],
+        price=data['price'],
+        description=data.get('description', '')
+    )
     db.session.add(new_product)
     db.session.commit()
     return jsonify({"message": "Product added"}), 201
