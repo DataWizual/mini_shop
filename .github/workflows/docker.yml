@@ -27,4 +27,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: eldordevops/mini_shop:latest
+          tags:
+            eldordevops/mini_shop:latest
+            eldordevops/mini_shop:${{ env.SHA_SHORT }}
