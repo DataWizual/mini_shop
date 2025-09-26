@@ -1,12 +1,12 @@
-# Python
+# игнорировать виртуальное окружение
+venv/
+
+# база SQLite (не пушим в GitHub)
+*.db
+
+# кэш Python
 __pycache__/
 *.pyc
 
-# Virtual env
-venv/
-
-# Databases
-*.db
-
-# System files
+# системные файлы
 .DS_Store
