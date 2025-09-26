@@ -30,6 +30,7 @@ jobs:
         with:
           context: .
           push: true
+          pull: true # всегда подтягиваем свежие базовые образы
           tags: |
             eldordevops/mini_shop:latest
             eldordevops/mini_shop:${{ env.SHA_SHORT }}

@@ -1,35 +1,16 @@
-name: CI/CD Pipeline
+name: Deploy
 
 on:
-  push:
-    branches:
-      - main # Запускаем только при пуше в ветку main
+  workflow_run:
+    workflows: ["CI/CD to Docker Hub"] # имя должно совпадать с docker.yml
+    types:
+      - completed
 
 jobs:
-  build-and-deploy:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-
     steps:
-      # 1. Клонируем репозиторий
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # 2. Логинимся в DockerHub
-      - name: Login to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      # 3. Собираем и пушим Docker-образ
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: eldordevops/mini_shop:latest,eldordevops/mini_shop:${{ github.sha }}
-
-      # 4. Подключаемся к серверу по SSH и деплоим
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.6
         with:
@@ -39,9 +20,12 @@ jobs:
           port: 22
           script: |
             cd /home/deploy/mini_shop
+
             # создаём/обновляем .env
-            echo "${{ secrets.DEPLOY_ENV }}" > .env
-            # тянем свежий образ
+            cat > .env << 'EOF'
+            ${{ secrets.DEPLOY_ENV }}
+            EOF
+
+            # обновляем контейнеры
             docker compose pull
-            # пересобираем и перезапускаем контейнеры
             docker compose up -d --force-recreate
