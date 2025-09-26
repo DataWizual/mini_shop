@@ -1,66 +1,35 @@
-name: CI/CD Pipeline
+name: CI/CD to Docker Hub
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Log in to DockerHub
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push image
-        uses: docker/build-push-action@v3
+      - name: Extract short commit SHA
+        run: echo "SHA_SHORT=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: eldordevops/mini_shop:${{ github.sha }},eldordevops/mini_shop:latest
-
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    steps:
-      - name: Prepare SSH client
-        run: sudo apt-get update && sudo apt-get install -y openssh-client
-
-      - name: Setup SSH known_hosts
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-
-      - name: Start ssh-agent and add key
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
-
-      - name: Ensure remote app dir exists
-        run: |
-          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
-          "mkdir -p /home/${{ secrets.DEPLOY_USER }}/mini_shop"
-
-      - name: Upload .env to server
-        env:
-          DEPLOY_ENV: ${{ secrets.DEPLOY_ENV }}
-        run: |
-          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
-          "printf '%s\n' \"$DEPLOY_ENV\" > /home/${{ secrets.DEPLOY_USER }}/mini_shop/.env && \
-           chown ${{ secrets.DEPLOY_USER }}:${{ secrets.DEPLOY_USER }} /home/${{ secrets.DEPLOY_USER }}/mini_shop/.env"
-
-      - name: Deploy: pull image & restart compose
-        run: |
-          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} << 'EOF'
-            set -e
-            cd /home/${{ secrets.DEPLOY_USER }}/mini_shop
-            docker compose pull
-            docker compose -f docker-compose.yml --env-file .env up -d --force-recreate
-            docker system prune -f
-          EOF
+          tags: |
+            eldordevops/mini_shop:latest
+            eldordevops/mini_shop:${{ env.SHA_SHORT }}
