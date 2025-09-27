@@ -12,7 +12,7 @@ DB_HOST = os.getenv("POSTGRES_HOST", "db")
 
 app = Flask(__name__)
 
-# Конфигурация БД через переменные окружения
+# Конфигурация БД через переменные окружения (я это изменил позже)
 DB_USER = os.getenv("POSTGRES_USER", "postgres")
 DB_PASSWORD = os.getenv("POSTGRES_PASSWORD", "postgres")
 DB_NAME = os.getenv("POSTGRES_DB", "shop")
