@@ -10,3 +10,4 @@ COPY . .
 ENV FLASK_ENV=production
 
 CMD ["python", "app.py"]
+#Eldor Zufarov

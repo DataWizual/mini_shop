@@ -34,3 +34,5 @@ jobs:
           tags: |
             eldordevops/mini_shop:latest
             eldordevops/mini_shop:${{ env.SHA_SHORT }}
+
+#Eldor Zufarov
