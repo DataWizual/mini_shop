@@ -1,0 +1,48 @@
+# === Python cache / временные файлы ===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.tmp
+*.log
+
+# === Virtual environments ===
+venv/
+env/
+.venv/
+
+# === SQLite локальная база (для разработки заказчика) ===
+database.db
+
+# === Flask / instance folder ===
+instance/
+
+# === Alembic / миграции ===
+migrations/versions/*.pyc
+migrations/versions/__pycache__/
+
+# === VSCode / PyCharm configs ===
+.vscode/
+.idea/
+
+# === System files ===
+.DS_Store
+Thumbs.db
+
+# === Docker build artifacts ===
+*.pid
+*.sock
+
+# === Logs ===
+logs/
+*.log
+
+# === Coverage / testing ===
+.coverage
+htmlcov/
+.tox/
+pytest_cache/
+
+# === Temporary Python folders ===
+tmp/
+temp/
