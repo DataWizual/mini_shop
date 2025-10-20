@@ -1,0 +1,20 @@
+name: ✅ Mini Shop CI Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧩 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🧪 Run sanity check
+        run: |
+          echo "✅ GitHub Actions connected successfully!"
+          echo "Repository contents:"
+          ls -la

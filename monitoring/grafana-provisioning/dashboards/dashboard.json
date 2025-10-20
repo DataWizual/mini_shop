@@ -1,0 +1,25 @@
+{
+  "id": null,
+  "title": "Mini Shop Backend Metrics",
+  "timezone": "browser",
+  "panels": [
+    {
+      "type": "graph",
+      "title": "Request Latency (Seconds)",
+      "targets": [
+        { "expr": "rate(http_request_duration_seconds_sum[1m]) / rate(http_request_duration_seconds_count[1m])" }
+      ],
+      "datasource": "Prometheus"
+    },
+    {
+      "type": "stat",
+      "title": "Uptime",
+      "targets": [
+        { "expr": "time() - process_start_time_seconds" }
+      ],
+      "datasource": "Prometheus"
+    }
+  ],
+  "schemaVersion": 16,
+  "version": 1
+}

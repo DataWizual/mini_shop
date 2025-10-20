@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: mini_shop_db
+    environment:
+      POSTGRES_USER: shopuser #postgres
+      POSTGRES_PASSWORD: shoppass #postgres
+      POSTGRES_DB: shop
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - shopnet
+
+  backend:
+    build: ./backend
+    container_name: mini_shop_backend
+    environment:
+      POSTGRES_HOST: mini_shop_db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: shopuser #postgres
+      POSTGRES_PASSWORD: shoppass #postgres
+      POSTGRES_DB: shop
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - shopnet
+
+volumes:
+  db_data:
+
+networks:
+  shopnet:
+    name: mini_shop_shopnet
