@@ -74,7 +74,7 @@ jobs:
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/mini_shop_backend:${{ env.TAG }} ./backend
           docker tag ${{ secrets.DOCKERHUB_USERNAME }}/mini_shop_backend:${{ env.TAG }} \
                      ${{ secrets.DOCKERHUB_USERNAME }}/mini_shop_backend:latest
-          
+
           echo "📤 Pushing to DockerHub..."
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/mini_shop_backend:${{ env.TAG }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/mini_shop_backend:latest
@@ -87,7 +87,7 @@ jobs:
             docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/mini_shop_monitoring:${{ env.TAG }} ./monitoring || exit 0
             docker tag ${{ secrets.DOCKERHUB_USERNAME }}/mini_shop_monitoring:${{ env.TAG }} \
                        ${{ secrets.DOCKERHUB_USERNAME }}/mini_shop_monitoring:latest || exit 0
-            
+
             docker push ${{ secrets.DOCKERHUB_USERNAME }}/mini_shop_monitoring:${{ env.TAG }} || exit 0
             docker push ${{ secrets.DOCKERHUB_USERNAME }}/mini_shop_monitoring:latest || exit 0
           else
@@ -100,18 +100,18 @@ jobs:
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mini_shop_backend:${{ env.TAG }} || echo "⚠️ Image not found (check permissions)"
           docker images ${{ secrets.DOCKERHUB_USERNAME }}/mini_shop_backend
 
-      - name: 🚀 Deploy to production (if SSH secrets exist)
-        if: secrets.SSH_HOST != '' && secrets.SSH_USER != '' && secrets.SSH_KEY != ''
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd ~/mini_shop
-            git pull origin main
-            chmod +x deploy_all.sh
-            ./deploy_all.sh
+#      - name: 🚀 Deploy to production (if SSH secrets exist)
+#        if: secrets.SSH_HOST != '' && secrets.SSH_USER != '' && secrets.SSH_KEY != ''
+#        uses: appleboy/ssh-action@v1.2.0
+#        with:
+#          host: ${{ secrets.SSH_HOST }}
+#          username: ${{ secrets.SSH_USER }}
+#          key: ${{ secrets.SSH_KEY }}
+#          script: |
+#            cd ~/mini_shop
+#            git pull origin main
+#            chmod +x deploy_all.sh
+#            ./deploy_all.sh
 
       - name: 🟢 Deployment complete
         run: echo "✅ CI/CD pipeline completed successfully for tag ${{ env.TAG }}"
