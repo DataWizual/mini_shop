@@ -30,12 +30,12 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/mini_shop_backend:latest
 
-      - name: 🏗️ Build and push monitoring image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./monitoring
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mini_shop_monitoring:latest
+#      - name: 🏗️ Build and push monitoring image
+#        uses: docker/build-push-action@v5
+#        with:
+#          context: ./monitoring
+#          push: true
+#          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mini_shop_monitoring:latest
 
       - name: ✅ Verify images pushed successfully
         run: |
