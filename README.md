@@ -47,7 +47,7 @@ Developer → GitHub → GitHub Actions → Docker Hub → Production
 ```
 
 Example Docker Hub repository:  
-👉 [datawizual/mini_shop](https://hub.docker.com/r/datawizual/mini_shop)
+👉 [datawizual/mini_shop](hub.docker.com/repositories/eldordevops)
 
 ---
 
@@ -154,7 +154,7 @@ and **AI-driven development support**.
 
 **Eldorz Zufarov (DataWizual)**  
 DevOps Engineer · Automation Enthusiast  
-[GitHub Profile](https://github.com/DataWizual)
+[GitHub Profile](https://github.com/eldordevops)
 
 ---
 
