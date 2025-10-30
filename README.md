@@ -1,6 +1,6 @@
 # 🏪 Mini Shop — DevOps Showcase Project
 
-[![CI/CD](https://github.com/DataWizual/mini_shop/actions/workflows/docker-build.yml/badge.svg)](https://github.com/DataWizual/mini_shop/actions)
+[![CI/CD](https://github.com/DataWizual/mini_shop/actions/workflows/deploy.yml/badge.svg)](https://github.com/DataWizual/mini_shop/actions)
 [![Docker Hub](https://img.shields.io/badge/DockerHub-mini__shop-blue?logo=docker)](https://hub.docker.com/r/datawizual/mini_shop)
 
 A containerized **microservice environment** demonstrating a full DevOps pipeline —  
