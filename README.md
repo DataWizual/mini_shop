@@ -121,13 +121,13 @@ Access Grafana locally:
 └──────┬───────┘        └──────┬───────┘
        │ build & tag           │ push images
        ▼                       ▼
-┌──────────────┐        ┌──────────────┐
-│ Docker  Hub  │◀──────▶│ mini_shop env│
-└──────────────┘        │  ├─ Flask API│
-                        │  ├─ Postgres │
-                        │  └─ Monitoring│
+┌──────────────┐        ┌────────────────┐
+│ Docker  Hub  │◀──────▶│ mini_shop env  │
+└──────────────┘        │  ├─ Flask API  │
+                        │  ├─ Postgres   │
+                        │  └─ Monitoring │
                         │     (Prom+Graf)│
-                        └──────────────┘
+                        └────────────────┘
 ```
 
 ---
