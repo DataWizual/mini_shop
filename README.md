@@ -47,7 +47,7 @@ Developer → GitHub → GitHub Actions → Docker Hub → Production
 ```
 
 Example Docker Hub repository:  
-👉 [eldordevops/mini_shop]([hub.docker.com/repositories/eldordevops](https://hub.docker.com/repositories/eldordevops))
+👉 [eldordevops/mini_shop](https://hub.docker.com/repositories/eldordevops)
 
 ---
 
