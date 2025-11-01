@@ -4,7 +4,14 @@ set -euo pipefail
 # === CONFIG ===
 PROJECT_DIR=~/mini_shop
 MONITORING_DIR=$PROJECT_DIR/monitoring
-LOG_FILE="$PROJECT_DIR/deploy_all_$(date +%Y%m%d_%H%M%S).log"
+
+LOG_DIR="$PROJECT_DIR/logs"
+mkdir -p "$LOG_DIR"
+
+find "$LOG_DIR" -type f -name "deploy_all_*.log" -mtime +7 -exec rm -f {} \;
+
+LOG_FILE="$LOG_DIR/deploy_all_$(date +%Y%m%d_%H%M%S).log"
+
 
 # === LOG HEADER ===
 {
